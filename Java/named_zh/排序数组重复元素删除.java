@@ -1,6 +1,8 @@
-package named_en;
+package named_zh;
 
 import java.util.Scanner;
+
+import named_en.RemoveDuplicates;
 
 /**
  * 题目：给定一个排序数组，你需要在原地删除重复出现的元素，使得每个元素只出现一次，返回移除后数组的新长度。
@@ -21,7 +23,7 @@ import java.util.Scanner;
  * 你不需要考虑数组中超出新长度后面的元素。
  **/
 
-public class RemoveDuplicates {
+public class 排序数组重复元素删除 {
 	public static void main(String[] args) {
 		RemoveDuplicates instances = new RemoveDuplicates();
 		Scanner input = new Scanner(System.in);
