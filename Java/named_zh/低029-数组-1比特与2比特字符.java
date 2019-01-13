@@ -29,11 +29,16 @@ class Solution {
     public boolean isOneBitCharacter(int[] bits) {
         int count = 0;
         for (int i = bits.length - 2; i >= 0; i--) {
-            if (bits[i] == 0) {
+            if (bits[i] == 0) {//由于最后一个必为0，所以由count计数
+				/**当倒数第二个进入为0，代表最后一个必为1字节数
+				count计算个数，注意出去才加1，也就是[1010],这种第二个0进入count=1，返回false
+				若是进入为[0110]count为2时才进入，返回true
+				就是count是刨除最后一位在2字节数是偶数时进入
+				**/
                 return count % 2 == 0 ? true : false;
             }
             count++;
         }
-        return count % 2 == 0 ? true : false;
+        return count % 2 == 0 ? true : false;//上述解释一致
     }
 }
