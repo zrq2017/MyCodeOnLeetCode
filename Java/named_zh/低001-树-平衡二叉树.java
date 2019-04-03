@@ -58,7 +58,7 @@ class Solution {
     public int depth(TreeNode root){
         if(root==null) return 0;
         int lheight=depth(root.left),rheight=depth(root.right);
-        if(lheight==-1||rheight==-1) return -1;
+        if(lheight==-1||rheight==-1) return -1;//-1表示两棵树不平衡
         return Math.abs(lheight-rheight)<=1?Math.max(lheight,rheight)+1:-1;//加1保证树的深度由下往上增加
     }
 }
