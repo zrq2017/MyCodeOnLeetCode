@@ -29,6 +29,64 @@
 **/
 class Solution {
     /**
+     * 使用邻接表进行拓扑排序（BFS）
+     * 1.先定义邻接表数组节点及链表节点，按照边信息构造邻接表
+     * 2.将入度为0的节点入栈，遍历更新入栈节点对应的终点的入度，更新后为0继续入栈
+     * 3.完成后根据入栈节点数与总节点数判断是否完成拓扑排序
+     * @param numCourses
+     * @param prerequisites
+     * @return
+     */
+    public boolean canFinish(int numCourses, int[][] prerequisites) {//prerequisites的边为0<-1，即数组第二项为边开头，第一项为边结尾
+        InNode[] inNodes=new InNode[numCourses];//构造邻接表数组
+        for(int i=0;i<numCourses;i++) {//初始化每个数组节点
+            inNodes[i]=new InNode();
+            inNodes[i].in=0;
+            inNodes[i].val=i;
+        }
+        for(int i=0;i<prerequisites.length;i++) {//构造每个点的出度连接节点链表
+            Node temp=inNodes[prerequisites[i][1]].next;//保存起点连接边的终点
+            Node node=new Node();
+            node.val=prerequisites[i][0];//根据边列表构造边终点
+            inNodes[prerequisites[i][0]].in++;//终点的入度加1
+            inNodes[prerequisites[i][1]].next=node;//起点连接边终点
+            node.next=temp;
+        }
+        Stack<InNode> stack=new Stack<>();
+        int count=0;
+        for(int i=0;i<numCourses;i++){
+            if(inNodes[i].in==0) {
+                stack.push(inNodes[i]);//将入度为0的节点入栈
+                count++;
+            }
+        }
+        while (!stack.isEmpty()){//栈不空，代表有有入度为零的节点可以进入
+            Node temp=stack.pop().next;//保存入度为0的点的边链表首项
+            while(temp!=null){
+                inNodes[temp.val].in--;//起点连接的终点对应的入度减1
+                if(inNodes[temp.val].in==0){//对应点入度为0，入栈
+                    stack.push(inNodes[temp.val]);
+                    count++;
+                }
+                temp=temp.next;
+            }
+        }
+        return count==numCourses;
+    }
+
+    class InNode{//邻接表中数组的每个节点，包含入度
+        int in;
+        int val;
+        Node next;
+    }
+
+    class Node{//邻接表中数组的链表的节点
+        int val;
+        Node next;
+    }
+}
+class Solution {
+    /**
      * 深度优先拓扑排序（有向无环图）//这个代码可以改成循环体的形式，不用递归
      * 1.根据输入边先构建邻接矩阵形式的图的表示
      * 2.利用visited数组记录每个点的入度信息
