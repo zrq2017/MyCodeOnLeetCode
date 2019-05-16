@@ -34,7 +34,67 @@ paths[i] = [x, y] 描述了花园 x 到花园 y 的双向路径。
 不存在花园有 4 条或者更多路径可以进入或离开。
 保证存在答案。
 **/
-//网上的代码，通过：http://www.bubuko.com/infodetail-3057394.html
+//（1）参考（2）的想法对（3）的程序结构做调整，使得结果更优
+/**（1）与（2）的对比
+* 执行用时	内存消耗
+* 26 ms		55.5 MB	（1）
+* 96 ms		67 MB	（2）
+*/
+class Solution {
+    /**
+     * 使用贪心：
+     * idea: 对每一个花园依次进行染色时，必定可以直接染色，因为相临接的最多最多就是三个，一共4中颜色，所以一定可以直接染色了
+     *
+     * 具体想法：
+     * 每次对节点染色时，新建一个colors数组，colors[j] , 代表节点i旁边临接的节点赋值的颜色是否有，如果有，就赋值为1 然后遍历，colors,给节点i进行染色
+     */
+    public int[] gardenNoAdj(int N, int[][] paths) {
+        int len=N+1;
+        Node[] nodes=new Node[len];//保存图
+        for(int i=1;i<len;i++){
+            nodes[i]=new Node(i);//初始化头节点
+        }
+        for(int i=0,pLen=paths.length;i<pLen;i++){
+            Node t1=nodes[paths[i][0]].next,t2=nodes[paths[i][1]].next;
+            Node a1=new Node(paths[i][1]),a2=new Node(paths[i][0]);
+            nodes[paths[i][0]].next=a1;//源点边
+            nodes[paths[i][1]].next=a2;//终点边
+            a1.next=t1;
+            a2.next=t2;
+        }
+        for(int i=1;i<len;i++){//按点着色就可以，不需要使用dfs之类的
+            int[] color=new int[5];
+            Node next=nodes[i].next;
+            while(next!=null){//使用颜色数组设置连接的点着色过的选择
+                if(nodes[next.index].type!=0){
+                    color[nodes[next.index].type]=1;//对应节点的选择值
+                }
+                next=next.next;
+            }
+            for (int k=4;k>0;k--) {//使用倒序的原因是因为循环的最后结果才是1，所以最后没被使用的选择才是该点最终的选择
+                if(color[k]==0) {
+                    nodes[i].type = k;
+                }
+            }
+        }
+        int[] answer=new int[N];
+        for (int i=1;i<len;i++){
+            answer[i-1]=nodes[i].type;
+        }
+        return answer;
+    }
+    
+    class Node{
+        int index;//保存点序号
+        int type;//保存选择
+        Node next;
+        Node(int index){
+            this.index=index;
+        }
+    }
+}
+
+//（2）网上的代码，通过：http://www.bubuko.com/infodetail-3057394.html
 class Solution {
     /**
      * 使用贪心：
@@ -64,7 +124,7 @@ class Solution {
    
 }
 
-//调整结构使用遍历，执行出错
+//（3）调整结构使用遍历，执行出错
 class Solution {
     class Node{
         int index;//保存点序号
@@ -122,7 +182,7 @@ class Solution {
    
 }
 
-//dfs,超时
+//（4）dfs,超时
 class Solution {
     public int[] gardenNoAdj(int N, int[][] paths) {
         int len=N+1;
@@ -167,7 +227,7 @@ class Solution {
     }
 }
 
-//暴力破解：遍历每个点选择与其相邻边的点不同的选择，超时
+//（5）暴力破解：遍历每个点选择与其相邻边的点不同的选择，超时
 public int[] gardenNoAdjViolence(int N, int[][] paths) {
 	int len=N+1;
 	int[] answer=new int[len];//保存每个点的选择
