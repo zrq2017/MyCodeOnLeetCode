@@ -51,7 +51,7 @@ public class FindItinerary {
     private static void dfs(String str) {
         PriorityQueue<String> queue=map.get(str);
         while(queue!=null && !queue.isEmpty()){//一直会进入循环，所以先访问的反而暂时不会保存到结果中，后访问的先入结果
-            dfs(queue.poll());
+            dfs(queue.poll());//出队列保证了不会再访问这个行程
         }
         result.addFirst(str);//后面添加的反而是之前的所以一直加在队头
     }
