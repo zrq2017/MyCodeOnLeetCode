@@ -13,6 +13,16 @@
 如果你已经实现复杂度为 O(n) 的解法，尝试使用更为精妙的分治法求解
 **/
 class Solution {
+	//第二个的精简版本
+	public int maxSubArray(int[] nums) {
+        if(nums==null||nums.length==0) return 0;
+        int presum=nums[0],max=presum;
+        for(int i=1;i<nums.length;i++){
+            presum=presum>0?presum+nums[i]:nums[i];//之前要大于0才会使结果更大
+            max=Math.max(max,presum);
+        }
+        return max;
+    }
     public int maxSubArray(int[] nums) {
         if (nums.length == 0) {
             return 0;

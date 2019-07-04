@@ -20,6 +20,21 @@ n 是非负整数，且不会超过输入数组的大小。
 
 **/
 class Solution {
+	public boolean canPlaceFlowers(int[] flowerbed, int n) {
+        int cnt=0;
+        for(int i=0;i<flowerbed.length;i++){
+            if(flowerbed[i]==1){//为1直接继续判断下一个
+                continue;
+            }
+            int pre=i==0?0:flowerbed[i-1];//前一个
+            int next=i==flowerbed.length-1?0:flowerbed[i+1];//后一个
+            if(pre==0&&next==0){//前后都为0才能插入
+                cnt++;
+                flowerbed[i]=1;
+            }
+        }
+        return cnt>=n;//满足条件才返回true
+    }
     //判断开头结尾是不是连续为0，是计数加一，判断中间是不是连续三个0是就加1，每次加一都要将数组置位
     public boolean canPlaceFlowers(int[] flowerbed, int n) {
         int count = 0;

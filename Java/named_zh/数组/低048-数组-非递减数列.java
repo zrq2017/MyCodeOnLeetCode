@@ -18,6 +18,27 @@
 
 **/
 class Solution {
+	/**
+	* 优先考虑令 nums[i - 1] = nums[i]，
+	* 因为如果修改 nums[i] = nums[i - 1] 的话，那么 nums[i] 这个数会变大，就有可能比 nums[i + 1] 大，从而影响了后续操作。
+	* 还有一个比较特别的情况就是 nums[i] < nums[i - 2]，修改 nums[i - 1] = nums[i] 不能使数组成为非递减数组，只能修改 nums[i] = nums[i - 1]。
+	*/
+	public boolean checkPossibility(int[] nums) {
+        int cnt=0;
+        for(int i=1;i<nums.length&&cnt<2;i++){
+            if(nums[i]>=nums[i-1]){
+                continue;
+            }
+            cnt++;
+            //当前的不满足要么改当前自己要么改前一个
+            if(i-2>=0&&nums[i-2]>nums[i]){//当前这个不满足条件要判断怎么修改最合适，当前的已经比前一个小若是还比前两个小
+                nums[i]=nums[i-1];//那就说明当前这个应该修改为前一个的大小
+            }else{//否则说明前一个太大了应该改成尽量小点
+                nums[i-1]=nums[i];
+            }
+        }
+        return cnt<=1;
+    }
     public boolean checkPossibility(int[] nums) {
         int count = 0;
         for (int i = 1; i < nums.length; i++) {
